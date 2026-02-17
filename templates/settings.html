@@ -1,0 +1,340 @@
+{% extends "base.html" %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">
+                <i class="fas fa-cog"></i> Settings & Data Management
+            </h1>
+            <p class="page-subtitle">Manage your data and system preferences</p>
+        </div>
+    </div>
+
+    <!-- Upload History Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3><i class="fas fa-history"></i> Upload History</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>File Name</th>
+                            <th>Upload Date</th>
+                            <th>Records Processed</th>
+                            <th>Success</th>
+                            <th>Failed</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="settingsHistoryTableBody">
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                <p class="no-data">No upload history available</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-controls">
+                <button onclick="changeHistoryPage(-1)" class="btn btn-outline btn-sm" id="histPrevBtn">
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+                <span class="page-info" id="histPageInfo">Page 1 of 1</span>
+                <button onclick="changeHistoryPage(1)" class="btn btn-outline btn-sm" id="histNextBtn">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attendance Configuration Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3><i class="fas fa-sliders-h"></i> Attendance Configuration</h3>
+        </div>
+        <div class="card-body">
+            <style>
+                .config-section {
+                    background: #f8f9fa;
+                    border-radius: 12px;
+                    padding: 24px;
+                    margin-bottom: 24px;
+                    border: 1px solid #e9ecef;
+                    transition: all 0.2s ease;
+                }
+
+                .config-section:hover {
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+                    border-color: #dee2e6;
+                }
+
+                .section-title {
+                    color: #1a1a2e;
+                    /* webential-navy */
+                    font-weight: 700;
+                    margin-bottom: 20px;
+                    display: flex;
+                    align-items: center;
+                    font-size: 1.1rem;
+                }
+
+                .section-title i {
+                    color: #e94560;
+                    /* webential-accent */
+                    background: rgba(233, 69, 96, 0.1);
+                    padding: 8px;
+                    border-radius: 8px;
+                    margin-right: 12px;
+                }
+
+                .form-label {
+                    font-weight: 600;
+                    color: #495057;
+                    font-size: 0.9rem;
+                    margin-bottom: 8px;
+                }
+
+                .input-group-text {
+                    background-color: #fff;
+                    border-right: none;
+                    color: #6c757d;
+                }
+
+                .form-control {
+                    border-left: 1px solid #ced4da;
+                    padding-left: 10px;
+                }
+
+                .form-control:focus {
+                    box-shadow: none;
+                    border-color: #ced4da;
+                }
+
+                .input-group:focus-within {
+                    box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.15);
+                    border-radius: 0.375rem;
+                }
+
+                .input-group:focus-within .input-group-text,
+                .input-group:focus-within .form-control {
+                    border-color: #e94560;
+                }
+
+                .helper-text {
+                    font-size: 0.8rem;
+                    color: #868e96;
+                    margin-top: 6px;
+                }
+            </style>
+
+            <form id="attendanceConfigForm">
+                <div class="row">
+                    <!-- Shift Schedule Column -->
+                    <div class="col-lg-6">
+                        <div class="config-section h-100">
+                            <div class="section-title">
+                                <i class="fas fa-clock"></i>
+                                <span>Shift Schedule</span>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="standardStartTime" class="form-label">Shift Start Time</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-sun"></i></span>
+                                        <input type="time" class="form-control" id="standardStartTime" required>
+                                    </div>
+                                    <div class="helper-text">Marks <span class="text-danger fw-bold">Late</span> arrival
+                                        after this time.</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="standardEndTime" class="form-label">Shift End Time</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-moon"></i></span>
+                                        <input type="time" class="form-control" id="standardEndTime" required>
+                                    </div>
+                                    <div class="helper-text">Marks <span class="text-warning fw-bold">Early
+                                            Departure</span> before this time.</div>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <label for="halfDayTime" class="form-label">Half Day Threshold</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-hourglass-half"></i></span>
+                                        <input type="time" class="form-control" id="halfDayTime" required>
+                                    </div>
+                                    <div class="helper-text">Leaves before or arrivals after this time count as
+                                        <strong>Half Day</strong>.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Break Rules Column -->
+                    <div class="col-lg-6">
+                        <div class="config-section h-100">
+                            <div class="section-title">
+                                <i class="fas fa-mug-hot"></i>
+                                <span>Break Rules</span>
+                            </div>
+
+                            <div class="row g-3 mb-4">
+                                <div class="col-6">
+                                    <label for="standardBreakStart" class="form-label">Window Start</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-hourglass-start"></i></span>
+                                        <input type="time" class="form-control" id="standardBreakStart" required>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label for="standardBreakEnd" class="form-label">Window End</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-hourglass-end"></i></span>
+                                        <input type="time" class="form-control" id="standardBreakEnd" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-2">
+                                    <div class="helper-text">Authorized break window. Breaks outside are flagged.</div>
+                                </div>
+                            </div>
+
+                            <div class="mb-0">
+                                <label for="maxBreakDuration" class="form-label">Max Duration Limit</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-stopwatch"></i></span>
+                                    <input type="number" class="form-control" id="maxBreakDuration" min="0" required>
+                                    <span class="input-group-text bg-light border-start text-muted"
+                                        style="font-size: 0.85rem;">Mins</span>
+                                </div>
+                                <div class="helper-text">Breaks exceeding this duration are flagged.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-2">
+                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                        <i class="fas fa-check-circle me-2"></i> Save Settings
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Data Management Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3><i class="fas fa-database"></i> Data Management</h3>
+        </div>
+        <div class="card-body">
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4><i class="fas fa-download"></i> Export All Data</h4>
+                        <p>Download all attendance records as Excel file</p>
+                    </div>
+                    <button onclick="exportAllData()" class="btn btn-primary">
+                        <i class="fas fa-file-excel"></i> Export Excel
+                    </button>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4><i class="fas fa-trash-alt"></i> Clear All Data</h4>
+                        <p>Permanently delete all attendance records and upload history</p>
+                    </div>
+                    <button onclick="clearAllData()" class="btn btn-danger">
+                        <i class="fas fa-exclamation-triangle"></i> Clear Data
+                    </button>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4><i class="fas fa-sync-alt"></i> Recalculate Status</h4>
+                        <p>Apply current settings (shift time, half day, breaks) to all existing data.</p>
+                    </div>
+                    <button onclick="recalculateData()" class="btn btn-warning text-white">
+                        <i class="fas fa-sync-alt"></i> Recalculate
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- File Format Documentation -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-book"></i> File Format Requirements</h3>
+        </div>
+        <div class="card-body">
+            <div class="documentation">
+                <h4>Excel File Format</h4>
+                <p>Your attendance file should be an Excel file (.xlsx or .xls) with the following columns:</p>
+
+                <div class="format-table">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Column Name</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>Employee ID</code></td>
+                                <td>Unique identifier for employee</td>
+                                <td>EMP001</td>
+                            </tr>
+                            <tr>
+                                <td><code>Employee Name</code></td>
+                                <td>Full name of employee</td>
+                                <td>John Doe</td>
+                            </tr>
+                            <tr>
+                                <td><code>Date</code></td>
+                                <td>Date of attendance</td>
+                                <td>2024-01-15</td>
+                            </tr>
+                            <tr>
+                                <td><code>Punch In</code></td>
+                                <td>Check-in time</td>
+                                <td>09:00 AM</td>
+                            </tr>
+                            <tr>
+                                <td><code>Punch Out</code></td>
+                                <td>Check-out time</td>
+                                <td>05:30 PM</td>
+                            </tr>
+                            <tr>
+                                <td><code>Status</code></td>
+                                <td>Attendance status</td>
+                                <td>Present / Absent / Late</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert alert-info mt-4">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Note:</strong> The system automatically calculates working hours based on punch in/out
+                    times.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+{% endblock %}

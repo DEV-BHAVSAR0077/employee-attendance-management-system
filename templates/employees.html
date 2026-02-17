@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Employees{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">
+                <i class="fas fa-users"></i> Employee Management
+            </h1>
+            <p class="page-subtitle">View and manage employee attendance records</p>
+        </div>
+        <div class="page-actions">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="employeeSearch" placeholder="Search employees..." onkeyup="filterEmployees()">
+            </div>
+        </div>
+    </div>
+
+    <!-- Employee Statistics -->
+    <div class="stats-cards">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <i class="fas fa-users stat-card-icon text-blue"></i>
+            </div>
+            <div class="stat-card-value" id="totalEmployeesCount">0</div>
+            <div class="stat-card-label">Total Employees</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <i class="fas fa-user-check stat-card-icon text-teal"></i>
+            </div>
+            <div class="stat-card-value" id="activeEmployeesCount">0</div>
+            <div class="stat-card-label">Active Today</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <i class="fas fa-star stat-card-icon text-emerald"></i>
+            </div>
+            <div class="stat-card-value" id="topPerformerName">-</div>
+            <div class="stat-card-label">Top Performer</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <i class="fas fa-percentage stat-card-icon text-amber"></i>
+            </div>
+            <div class="stat-card-value" id="avgAttendanceRate">0%</div>
+            <div class="stat-card-label">Avg Attendance</div>
+        </div>
+    </div>
+
+    <!-- Employee List -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-list"></i> Employee List</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Name</th>
+                            <th>Total Records</th>
+                            <th>Present</th>
+                            <th>Absent</th>
+                            <th>Attendance Rate</th>
+                            <th>Avg Hours/Day</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeeTableBody">
+                        <tr>
+                            <td colspan="8" class="text-center">
+                                <p class="no-data">No employee data available. Upload attendance file to see employees.
+                                </p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-controls">
+                <button onclick="changeEmployeePage(-1)" class="btn btn-outline btn-sm" id="empPrevBtn">
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+                <span class="page-info" id="empPageInfo">Page 1 of 1</span>
+                <button onclick="changeEmployeePage(1)" class="btn btn-outline btn-sm" id="empNextBtn">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Employee Detail Modal -->
+    <div id="employeeModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-user"></i> <span id="modalEmployeeName">Employee Details</span></h2>
+                <button onclick="closeEmployeeModal()" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="employee-detail-stats">
+                    <div class="detail-stat">
+                        <div class="detail-stat-label">Employee ID</div>
+                        <div class="detail-stat-value" id="modalEmployeeId">-</div>
+                    </div>
+                    <div class="detail-stat">
+                        <div class="detail-stat-label">Total Records</div>
+                        <div class="detail-stat-value" id="modalTotalRecords">0</div>
+                    </div>
+                    <div class="detail-stat">
+                        <div class="detail-stat-label">Attendance Rate</div>
+                        <div class="detail-stat-value" id="modalAttendanceRate">0%</div>
+                    </div>
+                    <div class="detail-stat">
+                        <div class="detail-stat-label">Avg Hours/Day</div>
+                        <div class="detail-stat-value" id="modalAvgHours">0h</div>
+                    </div>
+                </div>
+
+                <h3 class="mt-4"><i class="fas fa-history"></i> Attendance History</h3>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Punch In</th>
+                                <th>Punch Out</th>
+                                <th>Hours</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modalAttendanceHistory">
+                            <tr>
+                                <td colspan="5" class="text-center">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/employees.js') }}"></script>
+{% endblock %}

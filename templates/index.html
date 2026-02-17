@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Attendance Analysis System</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo2.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="min-h-screen bg-gradient">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-content">
+                    <div class="logo-section">
+                        <div class="logo-icon">
+                            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Webential Logo">
+                        </div>
+                        <div class="logo-text-group">
+                            <span class="logo-text">Webential</span>
+                            <span class="logo-subtitle">ATTENDANCE ANALYTICS</span>
+                        </div>
+                    </div>
+                    <div class="nav-actions">
+                        <a href="/dashboard" class="btn btn-primary">Open Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-content fade-in">
+                    <h1 class="hero-title">
+                        Data-Driven Attendance<br>
+                        <span class="gradient-text">That Performs</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Transform raw attendance data into actionable insights.
+                        Upload, analyze, and optimize employee productivity with
+                        intelligent reporting and real-time analytics.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="/dashboard" class="btn btn-primary btn-lg">
+                            Get Started Free
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="stats-grid fade-in-up">
+                        <div class="stat-item">
+                            <p class="stat-value">99.9%</p>
+                            <p class="stat-label">Accuracy</p>
+                        </div>
+                        <div class="stat-item">
+                            <p class="stat-value">&lt;1min</p>
+                            <p class="stat-label">Processing Time</p>
+                        </div>
+                        <div class="stat-item">
+                            <p class="stat-value">100%</p>
+                            <p class="stat-label">Automated</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Everything You Need</h2>
+                    <p class="section-subtitle">
+                        Comprehensive attendance management with powerful analytics and reporting
+                    </p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card fade-in-up">
+                        <div class="feature-icon bg-emerald">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <h3 class="feature-title">Easy Excel Upload</h3>
+                        <p class="feature-desc">
+                            Drag and drop daily attendance Excel files with employee punch in/out times for instant
+                            processing
+                        </p>
+                    </div>
+
+                    <div class="feature-card fade-in-up" style="animation-delay: 0.1s;">
+                        <div class="feature-icon bg-blue">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3 class="feature-title">Calendar View</h3>
+                        <p class="feature-desc">
+                            Visualize attendance data on an interactive calendar with color-coded status indicators
+                        </p>
+                    </div>
+
+                    <div class="feature-card fade-in-up" style="animation-delay: 0.2s;">
+                        <div class="feature-icon bg-teal">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3 class="feature-title">Working Hours Analysis</h3>
+                        <p class="feature-desc">
+                            Automatic calculation of working hours based on punch in/out times with detailed breakdowns
+                        </p>
+                    </div>
+
+                    <div class="feature-card fade-in-up" style="animation-delay: 0.3s;">
+                        <div class="feature-icon bg-navy">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3 class="feature-title">Analytics & Insights</h3>
+                        <p class="feature-desc">
+                            Comprehensive charts and graphs showing attendance trends, patterns, and employee
+                            performance
+                        </p>
+                    </div>
+
+                    <div class="feature-card fade-in-up" style="animation-delay: 0.4s;">
+                        <div class="feature-icon bg-orange">
+                            <i class="fas fa-file-download"></i>
+                        </div>
+                        <h3 class="feature-title">Export Reports</h3>
+                        <p class="feature-desc">
+                            Download monthly attendance reports in PDF or Excel format with one click
+                        </p>
+                    </div>
+
+                    <div class="feature-card fade-in-up" style="animation-delay: 0.5s;">
+                        <div class="feature-icon bg-indigo">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="feature-title">Employee Management</h3>
+                        <p class="feature-desc">
+                            Track individual employee attendance history with detailed statistics and metrics
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits Section -->
+        <section class="benefits-section">
+            <div class="container">
+                <div class="benefits-card">
+                    <div class="benefits-content">
+                        <div class="benefits-text">
+                            <h2 class="benefits-title">Why Choose Our System?</h2>
+                            <p class="benefits-subtitle">
+                                Save time and eliminate manual errors with automated attendance tracking and analysis
+                            </p>
+                            <!-- <a href="/dashboard" class="btn btn-white btn-lg">Get Started</a> -->
+                        </div>
+                        <div class="benefits-list">
+                            <div class="benefit-item fade-in-right">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Automated working hours calculation</span>
+                            </div>
+                            <div class="benefit-item fade-in-right" style="animation-delay: 0.1s;">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Real-time attendance tracking</span>
+                            </div>
+                            <div class="benefit-item fade-in-right" style="animation-delay: 0.2s;">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Monthly report generation</span>
+                            </div>
+                            <div class="benefit-item fade-in-right" style="animation-delay: 0.3s;">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Late arrival and early leave detection</span>
+                            </div>
+                            <div class="benefit-item fade-in-right" style="animation-delay: 0.4s;">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Attendance rate monitoring</span>
+                            </div>
+                            <div class="benefit-item fade-in-right" style="animation-delay: 0.5s;">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Multi-format export (PDF & Excel)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-content fade-in-up">
+                    <i class="fas fa-chart-line cta-icon"></i>
+                    <h2 class="cta-title">Ready to Streamline Your Attendance?</h2>
+                    <p class="cta-subtitle">
+                        Join organizations using our system to manage employee attendance efficiently
+                    </p>
+                    <a href="/dashboard" class="btn btn-primary btn-lg">
+                        Start Today
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <!-- Company Branding -->
+                    <div class="footer-brand">
+                        <div class="footer-logo-row">
+                            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Webential Logo"
+                                class="footer-logo-img">
+                            <h3 class="footer-logo-text">Webential</h3>
+                        </div>
+                        <div class="footer-tagline">Attendance Analytics
+                            <span class="footer-dot">•</span> Data-Driven Insights
+                            <span class="footer-dot">•</span> Smart Workforce Management
+                        </div>
+                    </div>
+
+                    <!-- Footer Links -->
+                    <div class="footer-links-row">
+                        <a href="#privacy">Privacy Policy</a>
+                        <span class="footer-dot">•</span>
+                        <a href="#terms">Terms & Conditions</a>
+                        <span class="footer-dot">•</span>
+                        <a href="#contact">Contact Support</a>
+                    </div>
+
+                    <!-- Copyright -->
+                    <p class="footer-copyright">© 2026 Webential. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+</body>
+
+</html>

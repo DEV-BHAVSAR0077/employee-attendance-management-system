@@ -1,0 +1,100 @@
+# Environment variables and secrets
+.env
+.env.local
+.env.production
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+attendance.db
+gemini_usage.db
+
+# Cache and temporary files
+report_cache/
+*.log
+*.tmp
+.cache/
+__pycache__/
+
+# Uploads (sensitive data)
+uploads/
+*.xlsx
+*.xls
+*.csv
+
+# PDF outputs (if you don't want to track them)
+# *.pdf
+
+# OS files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Flask
+instance/
+.webassets-cache
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Documentation build
+docs/_build/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Sensitive configuration
+config.py
+secrets.py
+
+# Large model files (if any)
+*.bin
+*.pkl
+*.h5
+
+# Node modules (if using any frontend build tools)
+node_modules/
+package-lock.json
+yarn.lock

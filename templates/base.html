@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %} - Employee Attendance</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo2.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        function formatHours(decimalHours) {
+            if (decimalHours === null || decimalHours === undefined || isNaN(decimalHours)) return '-';
+            const hours = Math.floor(decimalHours);
+            const minutes = Math.round((decimalHours - hours) * 60);
+            
+            if (hours === 0 && minutes === 0) return '0h 0m';
+            
+            let parts = [];
+            if (hours > 0) parts.push(hours + 'h');
+            if (minutes > 0) parts.push(minutes + 'm');
+            
+            return parts.length > 0 ? parts.join(' ') : '0h 0m';
+        }
+    </script>
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <!-- Navigation -->
+        <nav class="navbar dashboard-nav">
+            <div class="container">
+                <div class="nav-content">
+                    <div class="logo-section">
+                        <div class="logo-icon">
+                            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Webential Logo">
+                        </div>
+                        <div class="logo-text-group">
+                            <span class="logo-text">Webential</span>
+                            <span class="logo-subtitle">ATTENDANCE ANALYTICS</span>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Menu -->
+                    <div class="nav-menu">
+                        <a href="/dashboard" class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                            <i class="fas fa-th-large"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="/reports" class="nav-link {% if request.endpoint == 'reports' %}active{% endif %}">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Reports</span>
+                        </a>
+                        <a href="/employees" class="nav-link {% if request.endpoint == 'employees' %}active{% endif %}">
+                            <i class="fas fa-users"></i>
+                            <span>Employees</span>
+                        </a>
+                        <a href="/settings" class="nav-link {% if request.endpoint == 'settings' %}active{% endif %}">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </div>
+
+                    <div class="nav-actions">
+                        <a href="/" class="btn btn-outline">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast"></div>
+    </div>
+
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

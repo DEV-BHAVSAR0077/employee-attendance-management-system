@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/calendar.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">
+                <i class="fas fa-th-large"></i> Dashboard
+            </h1>
+            <p class="page-subtitle">Overview of today's attendance and quick actions</p>
+        </div>
+        <div class="page-actions">
+            <div class="filter-group">
+                <div class="filter-item">
+                    <input type="date" id="startDate" class="form-control" onchange="applyFilters()">
+                </div>
+                <div class="filter-item">
+                    <span class="text-gray-500">to</span>
+                </div>
+                <div class="filter-item">
+                    <input type="date" id="endDate" class="form-control" onchange="applyFilters()">
+                </div>
+                <div class="filter-item">
+                    <select id="employeeFilter" class="form-control" onchange="applyFilters()">
+                        <option value="">All Employees</option>
+                    </select>
+                </div>
+                <!-- <div class="filter-item">
+                    <button onclick="resetFilters()" class="btn btn-outline">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-cards">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <i class="fas fa-calendar-check stat-card-icon text-blue"></i>
+            </div>
+            <div class="stat-card-value" id="totalRecords">0</div>
+            <div class="stat-card-label">Total Records</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <i class="fas fa-users stat-card-icon text-teal"></i>
+            </div>
+            <div class="stat-card-value" id="totalEmployees">0</div>
+            <div class="stat-card-label">Total Employees</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <i class="fas fa-percentage stat-card-icon text-emerald"></i>
+            </div>
+            <div class="stat-card-value" id="attendanceRate">0%</div>
+            <div class="stat-card-label">Attendance Rate</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <i class="fas fa-clock stat-card-icon text-amber"></i>
+            </div>
+            <div class="stat-card-value" id="avgHours">0h</div>
+            <div class="stat-card-label">Avg Working Hours</div>
+        </div>
+    </div>
+
+    <div class="grid-2-cols mb-4">
+        <!-- File Upload / Current File -->
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-file-upload"></i> Attendance File</h3>
+            </div>
+            <div class="card-body">
+                <!-- Upload Area -->
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="fileInput" accept=".xlsx,.xls" style="display: none;">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <p class="upload-text">Drag and drop Excel file here or click to browse</p>
+                    <p class="upload-subtext">Supports .xlsx and .xls files</p>
+                    <button onclick="event.stopPropagation(); document.getElementById('fileInput').click()"
+                        class="btn btn-primary mt-4">
+                        <i class="fas fa-file-excel"></i> Choose File
+                    </button>
+                </div>
+
+                <!-- Upload Progress -->
+                <div id="uploadProgress" class="upload-progress" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p class="progress-text" id="progressText">Uploading...</p>
+                </div>
+
+                <!-- Upload Result -->
+                <div id="uploadResult" class="upload-result" style="display: none;"></div>
+
+                <!-- Uploaded File Display -->
+                <div id="uploadedFileDisplay" class="uploaded-file-display" style="display: none;">
+                    <div class="uploaded-file-info">
+                        <div class="file-icon">
+                            <i class="fas fa-file-excel"></i>
+                        </div>
+                        <div class="file-details">
+                            <h3 class="file-name" id="uploadedFileName">attendance.xlsx</h3>
+                            <p class="file-meta">
+                                <span id="uploadedFileDate">Uploaded on Jan 1, 2024</span>
+                                <span class="separator">•</span>
+                                <span id="uploadedFileRecords">0 records processed</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="file-actions">
+                        <button onclick="downloadUploadedFile()" class="btn btn-outline btn-sm">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                        <button onclick="replaceFile()" class="btn btn-outline btn-sm">
+                            <i class="fas fa-sync-alt"></i> Replace
+                        </button>
+                        <button onclick="deleteUploadedFile()" class="btn btn-outline btn-sm btn-delete">
+                            <i class="fas fa-trash-alt"></i> Delete All Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Distribution Chart -->
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-chart-pie"></i> Time Distribution</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="timeChart"></canvas>
+                <div id="chartLegend" class="chart-legend"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Attendance Records -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-list"></i> Recent Attendance Records</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Employee Name</th>
+                            <th>Date</th>
+                            <th>Punch In</th>
+                            <th>Punch Out</th>
+                            <th>Working Hours</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceTableBody">
+                        <tr>
+                            <td colspan="7" class="text-center">
+                                <p class="no-data">No attendance records found. Upload an Excel file to get started.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Calendar Section -->
+    <div class="card mt-4">
+        <div class="card-header flex-between">
+            <div>
+                <h3><i class="fas fa-calendar-alt"></i> Attendance Calendar</h3>
+                <p class="text-sm text-gray-500 mt-1">View history and upload daily records</p>
+            </div>
+            <div class="calendar-controls">
+                <button id="prevMonth" class="btn btn-outline btn-sm"><i class="fas fa-chevron-left"></i></button>
+                <button id="nextMonth" class="btn btn-outline btn-sm"><i class="fas fa-chevron-right"></i></button>
+                <span id="currentMonthYear" class="calendar-month-year ml-2">October 2023</span>
+                <!-- <button id="viewMonthlyAnalysis" class="btn btn-primary btn-sm ml-4">
+                    <i class="fas fa-chart-bar"></i> Month Analysis
+                </button> -->
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="calendar-container">
+                <div class="calendar-header-row">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div id="calendarGrid" class="calendar-grid">
+                    <!-- Calendar days will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Daily Analysis Modal -->
+<div id="dailyAnalysisModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalDateTitle">Analysis</h3>
+            <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div id="dailyStats" class="grid-2-cols" style="display: none;">
+                <div class="daily-stat-item">
+                    <div class="daily-stat-value" id="dailyPresent">0</div>
+                    <div class="daily-stat-label">Present</div>
+                </div>
+                <div class="daily-stat-item">
+                    <div class="daily-stat-value" id="dailyAbsent">0</div>
+                    <div class="daily-stat-label">Absent</div>
+                </div>
+                <div class="daily-stat-item">
+                    <div class="daily-stat-value" id="dailyAvgHours">0h</div>
+                    <div class="daily-stat-label">Avg Hours</div>
+                </div>
+                <div class="daily-stat-item">
+                    <div class="daily-stat-value" id="dailyLate">0</div>
+                    <div class="daily-stat-label">Late Arrivals</div>
+                </div>
+            </div>
+            <div id="dailyUploadAction" class="mt-4 text-center">
+                <p class="text-gray-500 mb-2" id="dailyNoDataMsg">No data available for this date.</p>
+                <button id="btnUploadDaily" class="btn btn-primary">
+                    <i class="fas fa-upload"></i> Upload Attendance File
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
