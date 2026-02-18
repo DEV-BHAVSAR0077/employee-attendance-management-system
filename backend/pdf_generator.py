@@ -565,12 +565,30 @@ class AttendanceReportPDF:
         # === DETAILED ANALYSIS ===
         if 'attendance_analysis' in report_data:
             story.append(Paragraph("Detailed Attendance Analysis", self.styles['SectionHeader']))
-            analysis_text = self._ensure_string(report_data['attendance_analysis'])
             
-            # Split into paragraphs and format
-            analysis_paras = self._parse_and_format_text(analysis_text, self.styles['CustomBodyText'])
-            for para in analysis_paras:
-                story.append(para)
+            analysis_data = report_data['attendance_analysis']
+            
+            if isinstance(analysis_data, dict):
+                # Handle structured dictionary analysis
+                for section_title, section_content in analysis_data.items():
+                    # Format key as subheader
+                    story.append(Paragraph(str(section_title), self.styles['SubsectionHeader']))
+                    
+                    # Format content
+                    content_text = self._ensure_string(section_content)
+                    content_paras = self._parse_and_format_text(content_text, self.styles['CustomBodyText'])
+                    for para in content_paras:
+                        story.append(para)
+                    
+                    story.append(Spacer(1, 0.1*inch))
+            else:
+                # Handle plain text analysis (legacy/fallback)
+                analysis_text = self._ensure_string(analysis_data)
+                
+                # Split into paragraphs and format
+                analysis_paras = self._parse_and_format_text(analysis_text, self.styles['CustomBodyText'])
+                for para in analysis_paras:
+                    story.append(para)
             
             story.append(Spacer(1, 0.15*inch))
         
