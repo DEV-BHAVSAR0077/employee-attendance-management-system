@@ -53,11 +53,6 @@ def settings():
     """Render settings page"""
     return render_template('settings.html')
 
-@app.route('/ai-reports')
-def ai_reports_page():
-    """Render AI-powered reports page"""
-    return render_template('ai_reports.html')
-
 @app.route('/api/upload', methods=['POST'])
 def upload_attendance():
     """Upload and process attendance Excel file"""
