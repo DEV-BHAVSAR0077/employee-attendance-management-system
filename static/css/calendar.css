@@ -81,7 +81,7 @@
 }
 
 .calendar-holiday-label {
-    font-size: 0.65rem;
+    font-size: 1rem;
     display: block;
     margin-top: auto;
     color: #ef4444;
@@ -89,7 +89,7 @@
 }
 
 .calendar-day-number {
-    font-size: 0.9rem;
+    font-size: 1.3rem;
 }
 
 .calendar-controls {
