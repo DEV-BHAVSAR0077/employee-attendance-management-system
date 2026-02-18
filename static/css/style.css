@@ -979,7 +979,7 @@ body {
 .stat-card-label {
     color: var(--gray-600);
     font-size: 0.9375rem;
-    font-weight: 500;
+    font-weight: bold;
 }
 
 /* ====================================
