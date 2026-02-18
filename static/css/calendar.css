@@ -156,6 +156,7 @@
 .daily-stat-item {
     padding: 1rem;
     background-color: #f8fafc;
+    border: 1px solid #99a0a8;
     border-radius: 0.5rem;
     text-align: center;
 }
