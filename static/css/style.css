@@ -1178,7 +1178,7 @@ body {
     font-size: 0.9375rem;
     padding: 0 var(--spacing-xs);
     align-self: center;
-    margin-top: 1.5rem;
+    margin-top: 0.7rem;
 }
 
 /* Align buttons without labels to bottom (same line as inputs) */
