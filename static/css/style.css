@@ -2013,8 +2013,9 @@ body {
 
 .detail-stat {
     text-align: center;
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
     background: var(--neutral-light);
+    border: 2px solid #99a0a8;
     border-radius: var(--radius-md);
 }
 
